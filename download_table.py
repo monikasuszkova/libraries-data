@@ -12,7 +12,7 @@ warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
 
 BASE_URL = "https://mk.gov.cz/evidence-knihoven-adresar-knihoven-evidovanych-ministerstvem-kultury-a-souvisejici-informace-cs-341"
 
-DATA_DIR = Path("/Users/monika/libraries-data")
+DATA_DIR = Path(".")
 DATA_DIR.mkdir(exist_ok=True)
 
 # download the HTML page
