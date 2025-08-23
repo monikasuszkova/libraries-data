@@ -23,6 +23,7 @@ This task demonstrates an approach to automatically download and manage data fro
 ### Implementation
 This task demonstrates how to automatically download and process the latest data on registered libraries from the Ministry of Culture of the Czech Republic. The workflow ensures that the latest Excel file is always available, changes are detected, and the data is converted for analysis.
 
+#### Data Collection:
 All functionality is implemented in a Python script called:
 ```shell
 download_libraries.py
@@ -45,7 +46,7 @@ This script ensures automatic downloading, change detection, and conversion of t
 
 The script is divided into several logical steps, which are described below together with code snippets. Each snippet comes directly from the script:
 
-#### 1. Fetching the web page and locating the XLSX file
+##### 1. Fetching the web page and locating the XLSX file
 First, the script downloads the HTML page and finds the link to the most recent Excel file published by the Ministry.
 ```python
 resp = requests.get(BASE_URL)
@@ -60,7 +61,7 @@ if not xlsx_url.startswith("http"):
 print("Found XLSX file:", xlsx_url)
 ```
 
-#### 2. Preparing storage and preserving original file names
+##### 2. Preparing storage and preserving original file names
 All downloaded files are saved in the directory:
 ```bash
 /Users/monika/libraries-data
@@ -75,7 +76,7 @@ filename = os.path.basename(xlsx_url)
 file_path = DATA_DIR / filename
 ```
 
-#### 3. Downloading the file with change detection
+##### 3. Downloading the file with change detection
 To avoid storing duplicates, the script computes a SHA-256 hash of the file. If the file is unchanged since the last run, it is not downloaded again.
 ```python
 current_hash = hashlib.sha256(resp.content).hexdigest()
@@ -90,7 +91,7 @@ else:
     hash_file.write_text(current_hash)
 ```
 
-#### 4. Handling Excel-specific features
+##### 4. Handling Excel-specific features
 The Ministry’s Excel files may contain defined names (print areas, table references, etc.). The script suppresses warnings and prints out these definitions.
 ```python
 wb = load_workbook(file_path, data_only=True)
@@ -100,7 +101,7 @@ if wb.defined_names:
         print(" -", name.name, "→", name.attr_text)
 ```
 
-#### 5. Exporting data to CSV
+##### 5. Exporting data to CSV
 Finally, the data is loaded into pandas and exported as a CSV file with the same name as the Excel file.
 ```python
 df = pd.read_excel(file_path, engine="openpyxl")
@@ -109,5 +110,29 @@ df.to_csv(csv_path, index=False, encoding="utf-8")
 print("\nExported to CSV:", csv_path)
 ```
 
-#### 6. Ready for automation
-The workflow can be scheduled to run periodically (e.g., via cron on macOS), ensuring the dataset is always up-to-date without manual intervention.
+##### 6. Ready for automation
+The workflow can be scheduled to run periodically (e.g., GitHub Actions, CI/CD pipelines, Windows Task Scheduler, macOS/Linux cron), ensuring the dataset is always up-to-date without manual intervention.
+
+#### Automation with Cron:
+Once the Python script (download_table.py) was created and tested, the next step was to ensure that it can run automatically without manual execution.
+For our purposes, we use cron, a standard scheduler available on Unix-based systems (macOS, Linux).
+
+We defined the following cron job to run the script every 5 minutes:
+```bash
+*/5 * * * * cd /path/to/libraries-data && echo "=== $(date) ===" >> cron_log.txt && /usr/bin/python3 download_table.py >> cron_log.txt 2>&1
+```
+
+Explanation:
+* */5 * * * * → runs the job every 5 minutes.
+* cd /path/to/libraries-data → navigates to the folder where the script and data files are stored (replace /path/to/ with your actual directory).
+* echo "=== $(date) ===" >> cron_log.txt → logs the current timestamp before each run.
+* /usr/bin/python3 download_table.py → executes the script with Python (use the full path to your Python installation if needed).
+* \>\> cron_log.txt 2>&1 → appends both script output and errors into a log file named cron_log.txt.
+
+What it does:
+Every 5 minutes, the cron job checks for updates in the dataset.
+If the file has changed, it downloads the new Excel file, converts it to CSV, and updates the hash file.
+All activities (including timestamps, successful runs, or potential errors) are stored in cron_log.txt for later inspection.
+
+
+
