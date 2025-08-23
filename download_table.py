@@ -63,5 +63,5 @@ else:
     df = pd.read_excel(file_path, engine="openpyxl")
     csv_path = file_path.with_suffix(".csv")
     df.to_csv(csv_path, index=False, encoding="utf-8")
-    print("\nExported to CSV:", csv_path)
+    print("Exported to CSV:", csv_path)
 
