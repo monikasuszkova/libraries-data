@@ -129,10 +129,61 @@ Explanation:
 * /usr/bin/python3 download_table.py → executes the script with Python (use the full path to your Python installation if needed).
 * \>\> cron_log.txt 2>&1 → appends both script output and errors into a log file named cron_log.txt.
 
-What it does:
-Every 5 minutes, the cron job checks for updates in the dataset.
-If the file has changed, it downloads the new Excel file, converts it to CSV, and updates the hash file.
-All activities (including timestamps, successful runs, or potential errors) are stored in cron_log.txt for later inspection.
+Every 5 minutes, the cron job checks for updates in the dataset. If the file has changed, it downloads the new Excel file, converts it to CSV, and updates the hash file. All activities (including timestamps, successful runs, or potential errors) are stored in cron_log.txt for later inspection.
+
+For demonstration purposes, we scheduled the script to run every 5 minutes. In a real-world setup, a less frequent interval (e.g., once per day or once per week) would be more practical, depending on how often the source data is updated.
+
+## Second Task - Data Transformation and Interoperability
+When working with datasets such as the national register of libraries, different levels of transformation can be applied depending on the intended use. Below we outline three levels – from basic cleaning to advanced interoperability with other data sources.
+
+### 1. Basic cleaning and normalization
+* UTF-8 encoding for proper handling of Czech characters.
+* Remove duplicates and invalid records.
+* Standardize column names (e.g., library_name, municipality_code, ico).
+* Convert Excel files to CSV for easier reuse.
+
+### 2. Improving interoperability with other data sources
+* Geocode addresses into latitude and longitude.
+* Structure addresses into Street, House Number, Postal Code, City, Region.
+* Use standardized geographic codes (RÚIAN IDs, NUTS/LAU codes).
+* Add official identifiers: IČO, ISIL, and optionally Wikidata Q-ID.
+
+### 3. Publishing as open data
+* Export into machine-readable formats: CSV, JSON, GeoJSON, RDF.
+* Add persistent IDs (UUIDs or Wikidata links).
+* Include metadata: source, date of download, license.
+
+## Third Task - Permanent and Secure Storage
+### 1. Short-term storage:
+* Versioning within a Git repository (e.g., GitHub, GitLab) to capture changes over time.
+
+### 2. Long-term storage:
+* Store in a database (e.g., PostgreSQL with PostGIS extension for spatial data).
+* Backup on a university server or cloud storage (e.g., Ceph, S3-compatible storage).
+* Implement access controls, audit logs, and regular snapshots.
+
+### 3. Persistent identifiers:
+* Assign a DOI or Handle to the dataset (e.g., using Dataverse or Zenodo) to ensure long-term citability.
+
+## Fourth Task - Dataset Description According to the Czech Core Metadata Model (CCMM)
+CCMM is based on DCAT-AP and Dublin Core.
+
+Essential metadata to provide:
+* **Dataset title:** e.g., “Registry of Libraries Registered by the Czech Ministry of Culture”
+* **Description:** Brief summary of content, purpose, and provenance
+* **Provider:** Czech Ministry of Culture
+* **Dataset manager:** University or faculty responsible within the project
+* **Publication and update dates**
+* **Format:** CSV, JSON, RDF, XLSX
+* **License:** e.g., Creative Commons BY 4.0 (if allowed by the source)
+* **Geographic coverage:** Czech Republic
+* **Temporal coverage:** if the dataset is versioned
+* **Distribution URL:** link to download the dataset
+
+Recommendation:
+* Create metadata in JSON-LD or RDF format to ensure machine readability.
+
+
 
 
 
