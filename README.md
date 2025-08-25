@@ -59,7 +59,7 @@ print("Found XLSX file:", xlsx_url)
 ```
 
 #### 2. Preparing storage and preserving original file names
-The script preserves the original file name from the Ministry’s website.
+The script preserves the original file name from the Ministry’s website and saves it in the same directory where it is located.
 ```python
 DATA_DIR = Path(".")
 DATA_DIR.mkdir(exist_ok=True)
