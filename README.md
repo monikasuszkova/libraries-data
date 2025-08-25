@@ -140,7 +140,7 @@ python3 convert_to_ascii.py evidence-knihoven-06082025-20693.csv evidence-knihov
 
 The Python script produces an ASCII-converted CSV file `evidence-knihoven-06082025-20693_ascii.csv` in the same directory where the script is executed.
 
-Additionally, it may be necessary to extract partial data, for example, selected columns. This can be done with the standard UNIX command awk. For example, to extract all libraries along with their postal codes and regions:
+Additionally, it may be necessary to extract partial data, for example, selected columns. This can be done with the standard UNIX command `awk`. For example, to extract all libraries along with their postal codes and regions:
 
 ```bash
 awk -F '|' '{print $12,$17,$20}' evidence-knihoven-06082025-20693_ascii.csv
@@ -150,20 +150,19 @@ The produced output can then be further processed and converted into JSON-LD for
 
 ## Third Task - Permanent and Secure Storage
 
-* Backup on a university server or cloud storage (e.g. CESNET data storage)
-* Versioning within a Git repository (e.g., GitHub) to capture changes over time.
+To ensure the dataset is stored safely and changes are tracked over time, it is recommended to back up the files on a **university server or cloud storage** (for example, CESNET data storage). Additionally, using **version control within a Git repository** (such as GitHub) allows for capturing all changes, providing a clear history of the dataset over time.
 
 ## Fourth Task - Dataset Description According to the Czech Core Metadata Model (CCMM)
-CCMM (Czech Core Metadata Model) is a very new standard that defines what information (described as classes and subclasses) must be provided about a dataset so that both people and machines can easily find and use it. Model is described on https://github.com/techlib/CCMM/tree/main?tab=readme-ov-file
+**CCMM (Czech Core Metadata Model)** is a relatively new standard that defines what information (described as classes and subclasses) must be provided about a dataset so that both people and machines can easily find and use it. The model is described on [GitHub](https://github.com/techlib/CCMM/tree/main?tab=readme-ov-file).
 
-For our example we can create a short metadata desription as follows:
+For our example, we can create a short metadata description as follows:
 
-* **<title>** e.g., “Registry of Libraries Registered by the Czech Ministry of Culture”
+* **<title>** Registry of Libraries Registered by the Czech Ministry of Culture
 * **<description_text>** A dataset containing information about libraries officially registered by the Czech Ministry of Culture, including their names, addresses, and types.
-* **<time_reference>** Current registry (snapshot as of 06082025)
-* **<resource_url>** [link to download the dataset](https://mk.gov.cz/evidence-knihoven-adresar-knihoven-evidovanych-ministerstvem-kultury-a-souvisejici-informace-cs-341)
+* **<time_reference>** Current registry (snapshot as of 06-08-2025)
+* **<resource_url>** https://mk.gov.cz/evidence-knihoven-adresar-knihoven-evidovanych-ministerstvem-kultury-a-souvisejici-informace-cs-341
 
-Created metada will be put in the head of the JSON-LD file we already created with the library data.
+The created metadata will be placed in the head of the JSON-LD file that we recommended in the second task.
 
 
 
