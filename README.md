@@ -29,10 +29,7 @@ All functionality is implemented in a Python script called:
 download_libraries.py
 ```
 
-The script stores downloaded files in the following directory on the local machine:
-```bash
-/Users/monika/libraries-data
-```
+The script stores downloaded files in the same directory as the script.
 
 This script ensures automatic downloading, change detection, and conversion of the dataset on registered libraries provided by the Ministry of Culture of the Czech Republic.
 
