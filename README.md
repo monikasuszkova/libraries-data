@@ -10,7 +10,7 @@ The source data are provided by the Ministry of Culture of the Czech Republic an
 ```bash
 /libraries-data
 ├── download_table.py                          # Python script to download and convert XLSX data to CSV
-├── convert_to_ascii.py                        # Python script to convert CSV file with UTF-8 to ASCII
+├── convert_to_ascii.py                        # Python script to convert CSV file with UTF-8 encoding to ASCII
 ├── cron_log.txt                               # Log file for scheduled automated processing of download_table.py
 ├── last_hash.txt                              # Hash file for change detection
 ├── evidence-knihoven-06082025-20693.xlsx      # Original Excel file from the Ministry
@@ -85,7 +85,7 @@ else:
 ```
 
 #### 4. Handling Excel-specific features
-The Ministry’s Excel files may contain defined names (print areas, table references, etc.). The script suppresses warnings and prints out these definitions.
+The Ministry’s Excel file may contain defined names (print areas, table references, etc.). The script suppresses warnings and prints out these definitions.
 ```python
 wb = load_workbook(file_path, data_only=True)
 if wb.defined_names:
@@ -95,7 +95,7 @@ if wb.defined_names:
 ```
 
 #### 5. Exporting data to CSV
-Finally, the data is loaded into pandas and exported as a CSV file with the same name as the Excel file. The `|` character was used as a field separator.
+Finally, the data is loaded into Pandas and exported as a CSV file with the same name as the Excel file. The `|` character is used as a field separator.
 ```python
 df = pd.read_excel(file_path, engine="openpyxl")
 csv_path = file_path.with_suffix(".csv")
@@ -107,7 +107,7 @@ print("Exported to CSV:", csv_path)
 The workflow can be scheduled to run periodically (e.g. macOS/Linux cron), ensuring the dataset is always up-to-date without manual intervention.
 
 ### Automation with Cron:
-Once the Python script `download_table.py` was created and tested, the next step was to ensure that it can run automatically without manual execution.
+Once the Python script `download_table.py` was created and tested, the next step is to ensure that it can run automatically without manual execution.
 For our purposes, we use cron, a standard scheduler available on Unix-based systems (macOS, Linux).
 
 We defined the following cron job to run the script every 5 minutes:
@@ -150,7 +150,7 @@ The produced output can then be further processed and converted into JSON-LD for
 
 ## Third Task - Permanent and Secure Storage
 
-To ensure the dataset is stored safely and changes are tracked over time, it is recommended to back up the files on a **university server or cloud storage** (for example, CESNET data storage). Additionally, using **version control within a Git repository** (such as GitHub) allows for capturing all changes, providing a clear history of the dataset over time.
+To ensure the dataset is stored safely and changes are tracked over time, it is recommended to back up the files on a **university server or cloud storage** (like CESNET data storage). Additionally, using **version control within a Git repository** (such as GitHub) allows for capturing all changes, providing a clear history of the dataset over time.
 
 ## Fourth Task - Dataset Description According to the Czech Core Metadata Model (CCMM)
 **CCMM (Czech Core Metadata Model)** is a relatively new standard that defines what information (described as classes and subclasses) must be provided about a dataset so that both people and machines can easily find and use it. The model is described on [GitHub](https://github.com/techlib/CCMM/tree/main?tab=readme-ov-file).
@@ -162,7 +162,7 @@ For our example, we can create a short metadata description as follows:
 * **<time_reference>** Current registry (snapshot as of 06-08-2025)
 * **<resource_url>** https://mk.gov.cz/evidence-knihoven-adresar-knihoven-evidovanych-ministerstvem-kultury-a-souvisejici-informace-cs-341
 
-The created metadata will be placed in the head of the JSON-LD file that we recommended in the second task.
+The created metadata will be placed in the head of the JSON-LD file that we proposed in the second task.
 
 
 
